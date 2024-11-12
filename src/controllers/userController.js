@@ -4,9 +4,9 @@ const bcrypt = require('bcryptjs');
 
 class UserController {
   static async register(request, h) {
-    const { username, password } = request.payload;
+    const { name, email, password } = request.payload;
     try {
-      const user = await UserService.createUser (username, password);
+      const user = await UserService.createUser (name, email, password);
       return h.response(user).code(201);
     } catch (error) {
       return h.response({ error: 'User  creation failed' }).code(400);
@@ -14,13 +14,13 @@ class UserController {
   }
 
   static async login(request, h) {
-    const { username, password } = request.payload;
-    const user = await UserService.findUserByUsername(username);
+    const { email, password } = request.payload;
+    const user = await UserService.findUserByEmail(email);
     if (user && await bcrypt.compare(password, user.password)) {
-      const token = jwtUtils.generateToken(user.id, user.username);
+      const token = jwtUtils.generateToken(user.id, user.email);
       return h.response({ token }).code(200);
     } else {
-        return h.response({ error: 'Invalid username or password' }).code(403);
+        return h.response({ error: 'Invalid email or password' }).code(403);
     }
   }
 

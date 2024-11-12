@@ -4,15 +4,15 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 class UserService {
-  static async createUser (username, password) {
+  static async createUser (name, email, password) {
     const hashedPassword = await bcrypt.hash(password, 10);
     return await prisma.user.create({
-      data: { username, password: hashedPassword },
+      data: { name : name,  password: hashedPassword, email: email },
     });
   }
 
-  static async findUserByUsername(username) {
-    return await prisma.user.findUnique({ where: { username } });
+  static async findUserByEmail(email) {
+    return await prisma.user.findUnique({ where: { email } });
   }
 
   static async getAllUsers() {
