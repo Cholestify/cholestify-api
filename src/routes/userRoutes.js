@@ -1,29 +1,29 @@
-const UserController = require('../controllers/userController');
-const authMiddleware = require('../middleware/authMiddleware');
+const UserController = require("../controllers/userController");
+const authMiddleware = require("../middleware/authMiddleware");
 
 const userRoutes = [
   {
-    method: 'POST',
-    path: '/register',
+    method: "POST",
+    path: "/register",
     handler: UserController.register,
   },
   {
-    method: 'POST',
-    path: '/login',
+    method: "POST",
+    path: "/login",
     handler: UserController.login,
   },
   {
-    method: 'GET',
-    path: '/users',
+    method: "GET",
+    path: "/users",
     handler: UserController.getUsers,
     options: {
       pre: [authMiddleware],
     },
   },
   {
-    method: 'DELETE',
-    path: '/users/{id}',
-    handler: UserController.deleteUser ,
+    method: "DELETE",
+    path: "/users/{id}",
+    handler: UserController.deleteUser,
     options: {
       pre: [authMiddleware],
     },
