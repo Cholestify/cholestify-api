@@ -1,4 +1,4 @@
-const CholesterolHistoryService = require("../services/cholestrolHistoryService");
+const CholesterolHistoryService = require("../services/cholestrolHistoryService.js");
 
 class CholesterolHistoryController {
   static async addCholesterol(request, h) {
