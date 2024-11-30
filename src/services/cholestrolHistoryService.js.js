@@ -24,7 +24,7 @@ class CholesterolHistoryService {
   static async updateHistory(id, newNumber) {
     return await prisma.cholesterolHistory.update({
       where: {
-        id: Number(id), // Prisma hanya mendukung unique key di sini
+        id: Number(id),
       },
       data: {
         number: newNumber,
