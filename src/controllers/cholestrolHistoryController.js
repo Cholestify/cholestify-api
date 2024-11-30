@@ -1,74 +1,95 @@
-// const UserService = require("../services/userService");
-// const jwtUtils = require("../utils/jwtUtils");
-// const bcrypt = require("bcryptjs");
+const CholesterolHistoryService = require("../services/cholestrolHistoryService");
 
-// class cholestrolHistoryController {
-//   static async register(request, h) {
-//     const { name, email, password } = request.payload;
-//     try {
-//       const user = await UserService.createUser(name, email, password);
-//       return h
-//         .response({
-//           error: false,
-//           message: "Register successfully",
-//           data: user,
-//         })
-//         .code(201);
-//     } catch (error) {
-//       return h
-//         .response({
-//           error: true,
-//           message: "Register failed",
-//         })
-//         .code(400);
-//     }
-//   }
+class CholesterolHistoryController {
+  static async addCholesterol(request, h) {
+    const { number } = request.payload;
+    const { userId } = request.params;
+    try {
+      const dataCholesterol = await CholesterolHistoryService.newHistory(
+        userId,
+        number
+      );
+      return h
+        .response({
+          error: false,
+          message: "Add cholestrol history successfully",
+          data: dataCholesterol,
+        })
+        .code(201);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Add cholestrol history failed " + error.message,
+        })
+        .code(400);
+    }
+  }
 
-//   static async login(request, h) {
-//     const { email, password } = request.payload;
-//     const user = await UserService.findUserByEmail(email);
-//     if (user && (await bcrypt.compare(password, user.password))) {
-//       const token = jwtUtils.generateToken(user.id, user.email);
-//       return h
-//         .response({
-//           error: false,
-//           message: "Login successfully",
-//           data: {
-//             token: token,
-//           },
-//         })
-//         .code(200);
-//     } else {
-//       return h
-//         .response({
-//           error: true,
-//           message: "Invalid email or password",
-//         })
-//         .code(403);
-//     }
-//   }
+  static async getCholesterolHistory(request, h) {
+    const { userId } = request.params;
+    try {
+      const dataCholesterols =
+        await CholesterolHistoryService.findCholesterolHistoryByUserId(userId);
+      return h
+        .response({
+          error: false,
+          message: "Get cholestrol history successfully",
+          data: dataCholesterols,
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Get cholestrol history failed" + error.message,
+        })
+        .code(400);
+    }
+  }
 
-//   static async getUsers(request, h) {
-//     const users = await UserService.getAllUsers();
-//     return h
-//       .response({
-//         error: false,
-//         message: "Profile fetched successfully",
-//         data: users,
-//       })
-//       .code(200);
-//   }
+  static async updateCholestrolHistory(request, h) {
+    const { id } = request.params;
+    const { number } = request.payload;
+    const update = await CholesterolHistoryService.updateHistory(id, number);
 
-//   static async deleteUser(request, h) {
-//     const { id } = request.params;
-//     await UserService.deleteUser(id);
-//     return h
-//       .response({
-//         error: false,
-//         message: "User deleted successfully",
-//       })
-//       .code(204);
-//   }
-// }
+    try {
+      return h
+        .response({
+          error: false,
+          message: "Update cholestrol history successfully",
+          data: update,
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: error.message,
+        })
+        .code(500);
+    }
+  }
 
-// module.exports = cholestrolHistoryController;
+  static async deleteHistory(request, h) {
+    const { id } = request.params;
+    try {
+      await CholesterolHistoryService.deleteHistory(id);
+      return h
+        .response({
+          error: false,
+          message: "Cholesterol history deleted successfully",
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Cholesterol history deleted failed" + error.message,
+        })
+        .code(500);
+    }
+  }
+}
+
+module.exports = CholesterolHistoryController;
