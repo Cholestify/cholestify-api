@@ -7,8 +7,13 @@ dotenv.config();
 
 const init = async () => {
   const server = Hapi.server({
-    port: process.env.PORT || 3000,
+    port: process.env.PORT || 8080,
     host: "localhost",
+    routes: {
+      cors: {
+        origin: ["*"],
+      },
+    },
   });
 
   const allRoutes = [...userRoutes, ...cholestrolHistoryRoutes];
