@@ -11,33 +11,33 @@ const cholestrolHistoryRoutes = [
     method: "GET",
     path: "/cholestrol/{userId}",
     handler: CholesterolHistoryController.getCholesterolHistory,
-    // options: {
-    //   pre: [authMiddleware],
-    // },
+    options: {
+      pre: [authMiddleware],
+    },
   },
   {
     method: "GET",
     path: "/cholestrol/recentHistory/{userId}",
     handler: CholesterolHistoryController.getCholesterolRecentHistory,
-    // options: {
-    //   pre: [authMiddleware],
-    // },
+    options: {
+      pre: [authMiddleware],
+    },
   },
   {
     method: "PUT",
-    path: "/cholestrol/recentHistory/{userId}",
-    handler: CholesterolHistoryController.updateCholestrolRecentHistory,
-    // options: {
-    //   pre: [authMiddleware],
-    // },
+    path: "/cholestrol/{id}",
+    handler: CholesterolHistoryController.updateCholestrolHistory,
+    options: {
+      pre: [authMiddleware],
+    },
   },
   {
     method: "DELETE",
     path: "/cholestrol/delete/{id}",
     handler: CholesterolHistoryController.deleteHistory,
-    // options: {
-    //   pre: [authMiddleware],
-    // },
+    options: {
+      pre: [authMiddleware],
+    },
   },
 ];
 

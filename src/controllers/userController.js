@@ -59,6 +59,19 @@ class UserController {
       .code(200);
   }
 
+  static async updateProfile(request, h) {
+    const { id } = request.params;
+    const { name, email, birthdate, gender, weight, height } = request.payload;
+    const user = await UserService.updateUser(id, name, email, birthdate, gender, weight, height);
+    return h
+      .response({
+        error: false,
+        message: "Profile updated successfully",
+        data: user,
+      })
+      .code(200);
+  }
+
   static async deleteUser(request, h) {
     const { id } = request.params;
     await UserService.deleteUser(id);

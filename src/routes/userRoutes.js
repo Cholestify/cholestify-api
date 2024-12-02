@@ -21,6 +21,14 @@ const userRoutes = [
     },
   },
   {
+    method: "POST",
+    path: "/users/profile",
+    handler: UserController.updateProfile,
+    options: {
+      pre: [authMiddleware],
+    },
+  },
+  {
     method: "DELETE",
     path: "/users/{id}",
     handler: UserController.deleteUser,
