@@ -21,7 +21,7 @@ const userRoutes = [
     },
   },
   {
-    method: "POST",
+    method: "PUT",
     path: "/users/profile",
     handler: UserController.updateProfile,
     options: {

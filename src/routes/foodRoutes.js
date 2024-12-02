@@ -1,16 +1,19 @@
-const foodController = require("../controllers/cholestrolHistoryController");
+const foodController = require("../controllers/foodController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 const foodRoutes = [
   {
     method: "POST",
-    path: "/food/{userId}",
+    path: "/food",
     handler: foodController.addFood,
+    options: {
+      pre: [authMiddleware],
+    },
   },
   {
     method: "GET",
-    path: "/food/{userId}",
-    handler: foodController.getCholesterolHistory,
+    path: "/food",
+    handler: foodController.getFood,
     options: {
       pre: [authMiddleware],
     },
@@ -18,7 +21,7 @@ const foodRoutes = [
   {
     method: "PUT",
     path: "/food/{id}",
-    handler: foodController.updateCholestrolHistory,
+    handler: foodController.updateFood,
     options: {
       pre: [authMiddleware],
     },

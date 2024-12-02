@@ -76,13 +76,17 @@ class foodService {
         potassium: potassium,
         selenium: selenium,
         zinc: zinc,
-        nutritionDensity: nutritionDensity,
-        date: new Date(),
+        nutritionDensity: nutritionDensity
       },
     });
   }
 
-  static async updateHistory(
+  static async getAllFoods() {
+    const foods = await prisma.food.findMany();
+    return foods;
+  }
+
+  static async updateFood(
     id, 
     newFood, 
     newCaloricValue, 
@@ -159,14 +163,13 @@ class foodService {
         potassium: newPotassium,
         selenium: newSelenium,
         zinc: newZinc,
-        nutritionDensity: newNutrition,
-        date: new Date(),
+        nutritionDensity: newNutritionDensity,
       },
     });
   }
 
   static async deleteFood(id) {
-    return await prisma.cholesterolHistory.delete({
+    return await prisma.food.delete({
       where: { id: Number(id) },
     });
   }

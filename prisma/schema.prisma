@@ -69,7 +69,7 @@ model Food {
   zinc                   Float     // Zinc
   nutritionDensity       Float     // Nutrition density
   createdAt              DateTime  @default(now())  // Timestamp for record creation
-  updatedAt              DateTime  @updatedAt       // Timestamp for last update
+  updatedAt              DateTime?  @updatedAt       // Timestamp for last update
 
   mealFoods              MealFood[] // Relation to MealFood
 

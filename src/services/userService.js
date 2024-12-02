@@ -22,6 +22,21 @@ class UserService {
   static async deleteUser (id) {
     return await prisma.user.delete({ where: { id: Number(id) } });
   }
+
+  static async updateUser (id, name, email, birthdate, gender, weight, height) {
+    return await prisma.user.update({
+      where: { id: Number(id) },
+      data: { 
+        name: name, 
+        email: email, 
+        birthdate: birthdate,
+        gender: gender, 
+        weight: weight, 
+        height: height
+      },
+    });
+  }
+
 }
 
 module.exports = UserService;

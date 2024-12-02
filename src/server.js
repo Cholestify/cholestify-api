@@ -2,6 +2,7 @@ const Hapi = require("@hapi/hapi");
 const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRoutes");
 const cholestrolHistoryRoutes = require("./routes/cholestrolHistoryRoutes");
+const foodRoutes = require("./routes/foodRoutes");
 
 dotenv.config();
 
@@ -16,7 +17,7 @@ const init = async () => {
     },
   });
 
-  const allRoutes = [...userRoutes, ...cholestrolHistoryRoutes];
+  const allRoutes = [...userRoutes, ...cholestrolHistoryRoutes, ...foodRoutes];
 
   server.route(allRoutes);
 

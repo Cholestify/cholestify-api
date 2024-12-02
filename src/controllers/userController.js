@@ -49,6 +49,14 @@ class UserController {
   }
 
   static async getUsers(request, h) {
+    const idUser = request.user;
+    return h
+      .response({
+        error: false,
+        message: "Profile fetched successfully",
+        data: idUser,
+      })
+      .code(200);
     const users = await UserService.getAllUsers();
     return h
       .response({

@@ -2,17 +2,85 @@ const foodService = require("../services/foodService.js");
 
 class foodController {
   static async addFood(request, h) {
-    const { number } = request.payload;
-    const { userId } = request.params;
+    const { 
+        food, 
+        caloricValue, 
+        fat, 
+        saturatedFats,
+        monounsaturatedFats,
+        polyunsaturatedFats,
+        carbohydrates,
+        sugars,
+        protein,
+        dietaryFiber,
+        cholesterol,
+        sodium, 
+        water,
+        vitaminA,
+        vitaminB1,
+        vitaminB11,
+        vitaminB12,
+        vitaminB2,
+        vitaminB3,
+        vitaminB5,
+        vitaminB6,
+        vitaminC,
+        vitaminD,
+        vitaminE,
+        vitaminK,
+        calcium,
+        copper,
+        iron,
+        magnesium,
+        manganese,
+        phosphorus,
+        potassium,
+        selenium,
+        zinc,
+        nutritionDensity
+     } = request.payload;
     try {
-      const dataFood = await foodService.newHistory(
-        userId,
-        number
+      const dataFood = await foodService.newFood(
+        food,
+        caloricValue,
+        fat,
+        saturatedFats,
+        monounsaturatedFats,
+        polyunsaturatedFats,
+        carbohydrates,
+        sugars,
+        protein,
+        dietaryFiber,
+        cholesterol,
+        sodium, 
+        water,
+        vitaminA,
+        vitaminB1,
+        vitaminB11,
+        vitaminB12,
+        vitaminB2,
+        vitaminB3,
+        vitaminB5,
+        vitaminB6,
+        vitaminC,
+        vitaminD,
+        vitaminE,
+        vitaminK,
+        calcium,
+        copper,
+        iron,
+        magnesium,
+        manganese,
+        phosphorus,
+        potassium,
+        selenium,
+        zinc,
+        nutritionDensity
       );
       return h
         .response({
           error: false,
-          message: "Add food history successfully",
+          message: "Add Food successfully",
           data: dataFood,
         })
         .code(201);
@@ -20,21 +88,20 @@ class foodController {
       return h
         .response({
           error: true,
-          message: "Add food history failed " + error.message,
+          message: "Add Food failed " + error.message,
         })
         .code(400);
     }
   }
 
-  static async getfood(request, h) {
-    const { userId } = request.params;
+  static async getFood(request, h) {
     try {
       const dataFoods =
-        await foodService.findfoodByUserId(userId);
+        await foodService.getAllFoods();
       return h
         .response({
           error: false,
-          message: "Get food history successfully",
+          message: "Get Food successfully",
           data: dataFoods,
         })
         .code(200);
@@ -42,7 +109,7 @@ class foodController {
       return h
         .response({
           error: true,
-          message: "Get food history failed" + error.message,
+          message: "Get Food failed" + error.message,
         })
         .code(400);
     }
@@ -50,14 +117,85 @@ class foodController {
 
   static async updateFood(request, h) {
     const { id } = request.params;
-    const { number } = request.payload;
-    const update = await foodService.updateHistory(id, number);
+    const { food,
+            caloricValue,
+            fat,
+            saturatedFats,
+            monounsaturatedFats,
+            polyunsaturatedFats,
+            carbohydrates,
+            sugars,
+            protein,
+            dietaryFiber,
+            cholesterol,
+            sodium, 
+            water,
+            vitaminA,
+            vitaminB1,
+            vitaminB11,
+            vitaminB12,
+            vitaminB2,
+            vitaminB3,
+            vitaminB5,
+            vitaminB6,
+            vitaminC,
+            vitaminD,
+            vitaminE,
+            vitaminK,
+            calcium,
+            copper,
+            iron,
+            magnesium,
+            manganese,
+            phosphorus,
+            potassium,
+            selenium,
+            zinc,
+            nutritionDensity
+          } = request.payload;
+    const update = await foodService.updateFood(id,
+        food,
+        caloricValue,
+        fat,
+        saturatedFats,
+        monounsaturatedFats,
+        polyunsaturatedFats,
+        carbohydrates,
+        sugars,
+        protein,
+        dietaryFiber,
+        cholesterol,
+        sodium, 
+        water,
+        vitaminA,
+        vitaminB1,
+        vitaminB11,
+        vitaminB12,
+        vitaminB2,
+        vitaminB3,
+        vitaminB5,
+        vitaminB6,
+        vitaminC,
+        vitaminD,
+        vitaminE,
+        vitaminK,
+        calcium,
+        copper,
+        iron,
+        magnesium,
+        manganese,
+        phosphorus,
+        potassium,
+        selenium,
+        zinc,
+        nutritionDensity
+    );
 
     try {
       return h
         .response({
           error: false,
-          message: "Update food history successfully",
+          message: "Update food successfully",
           data: update,
         })
         .code(200);
@@ -74,18 +212,18 @@ class foodController {
   static async deleteHistory(request, h) {
     const { id } = request.params;
     try {
-      await foodService.deleteHistory(id);
+      await foodService.deleteFood(id);
       return h
         .response({
           error: false,
-          message: "Food history deleted successfully",
+          message: "Food deleted successfully",
         })
         .code(200);
     } catch (error) {
       return h
         .response({
           error: true,
-          message: "Food history deleted failed" + error.message,
+          message: "Food deleted failed" + error.message,
         })
         .code(500);
     }
