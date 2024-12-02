@@ -48,6 +48,30 @@ class CholesterolHistoryController {
     }
   }
 
+  static async getCholesterolRecentHistory(request, h) {
+    const { userId } = request.params;
+    try {
+      const dataCholesterols =
+        await CholesterolHistoryService.findCholesterolRecentHistoryByUserId(
+          userId
+        );
+      return h
+        .response({
+          error: false,
+          message: "Get cholestrol history successfully",
+          data: dataCholesterols,
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Get cholestrol history failed" + error.message,
+        })
+        .code(400);
+    }
+  }
+
   static async updateCholestrolHistory(request, h) {
     const { id } = request.params;
     const { number } = request.payload;

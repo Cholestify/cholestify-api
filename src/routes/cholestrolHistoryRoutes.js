@@ -16,6 +16,14 @@ const cholestrolHistoryRoutes = [
     // },
   },
   {
+    method: "GET",
+    path: "/cholestrol/recentHistory/{userId}",
+    handler: CholesterolHistoryController.getCholesterolRecentHistory,
+    // options: {
+    //   pre: [authMiddleware],
+    // },
+  },
+  {
     method: "PUT",
     path: "/cholestrol/{id}",
     handler: CholesterolHistoryController.updateCholestrolHistory,

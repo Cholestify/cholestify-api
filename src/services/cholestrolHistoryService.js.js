@@ -18,6 +18,20 @@ class CholesterolHistoryService {
       where: {
         userId: Number(userId),
       },
+      orderBy: {
+        date: "desc",
+      },
+    });
+  }
+
+  static async findCholesterolRecentHistoryByUserId(userId) {
+    return await prisma.cholesterolHistory.findFirst({
+      where: {
+        userId: Number(userId),
+      },
+      orderBy: {
+        date: "desc",
+      },
     });
   }
 
