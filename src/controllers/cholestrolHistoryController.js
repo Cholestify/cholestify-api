@@ -72,10 +72,13 @@ class CholesterolHistoryController {
     }
   }
 
-  static async updateCholestrolHistory(request, h) {
-    const { id } = request.params;
+  static async updateCholestrolRecentHistory(request, h) {
+    const { userId } = request.params;
     const { number } = request.payload;
-    const update = await CholesterolHistoryService.updateHistory(id, number);
+    const update = await CholesterolHistoryService.updateRecentHistory(
+      userId,
+      number
+    );
 
     try {
       return h

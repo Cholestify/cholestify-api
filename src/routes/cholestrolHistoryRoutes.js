@@ -25,8 +25,8 @@ const cholestrolHistoryRoutes = [
   },
   {
     method: "PUT",
-    path: "/cholestrol/{id}",
-    handler: CholesterolHistoryController.updateCholestrolHistory,
+    path: "/cholestrol/recentHistory/{userId}",
+    handler: CholesterolHistoryController.updateCholestrolRecentHistory,
     // options: {
     //   pre: [authMiddleware],
     // },
