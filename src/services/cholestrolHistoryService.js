@@ -6,7 +6,7 @@ class CholesterolHistoryService {
   static async newHistory(userId, number) {
     return await prisma.cholesterolHistory.create({
       data: {
-        userId: Number(userId), // Pastikan userId berupa angka
+        userId: Number(userId),
         number: number,
         date: new Date(),
       },

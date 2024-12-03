@@ -1,9 +1,9 @@
-const jwtUtils = require('../utils/jwtUtils');
+const jwtUtils = require("../utils/jwtUtils");
 
 const authMiddleware = async (request, h) => {
-  const token = request.headers.authorization?.split(' ')[1];
+  const token = request.headers.authorization?.split(" ")[1];
   if (!token) {
-    return h.response({ error: 'Unauthorized' }).code(401);
+    return h.response({ error: "Unauthorized" }).code(401);
   }
 
   try {
@@ -11,7 +11,7 @@ const authMiddleware = async (request, h) => {
     request.user = decoded;
     return h.continue;
   } catch (error) {
-    return h.response({ error: 'Invalid token' }).code(403);
+    return h.response({ error: "Invalid token" }).code(403);
   }
 };
 

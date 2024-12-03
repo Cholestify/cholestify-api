@@ -30,7 +30,7 @@ const userRoutes = [
   },
   {
     method: "DELETE",
-    path: "/users/{id}",
+    path: "/users/delete/{id}",
     handler: UserController.deleteUser,
     options: {
       pre: [authMiddleware],

@@ -2,8 +2,19 @@ const CholesterolHistoryService = require("../services/cholestrolHistoryService.
 
 class CholesterolHistoryController {
   static async addCholesterol(request, h) {
+    const userId = request.user.id;
+
     const { number } = request.payload;
-    const { userId } = request.params;
+
+    if (!number || !userId) {
+      return h
+        .response({
+          error: true,
+          message: "User ID and number are required",
+        })
+        .code(400);
+    }
+
     try {
       const dataCholesterol = await CholesterolHistoryService.newHistory(
         userId,
@@ -27,7 +38,7 @@ class CholesterolHistoryController {
   }
 
   static async getCholesterolHistory(request, h) {
-    const { userId } = request.params;
+    const userId = request.user.id;
     try {
       const dataCholesterols =
         await CholesterolHistoryService.findCholesterolHistoryByUserId(userId);
@@ -49,7 +60,7 @@ class CholesterolHistoryController {
   }
 
   static async getCholesterolRecentHistory(request, h) {
-    const { userId } = request.params;
+    const userId = request.user.id;
     try {
       const dataCholesterols =
         await CholesterolHistoryService.findCholesterolRecentHistoryByUserId(
@@ -73,7 +84,9 @@ class CholesterolHistoryController {
   }
 
   static async updateCholestrolRecentHistory(request, h) {
-    const { userId } = request.params;
+    const userId = request.user.id;
+    console.log(userId);
+
     const { number } = request.payload;
     const update = await CholesterolHistoryService.updateRecentHistory(
       userId,

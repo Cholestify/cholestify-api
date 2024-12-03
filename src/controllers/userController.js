@@ -57,20 +57,32 @@ class UserController {
         data: idUser,
       })
       .code(200);
-    const users = await UserService.getAllUsers();
-    return h
-      .response({
-        error: false,
-        message: "Profile fetched successfully",
-        data: users,
-      })
-      .code(200);
+    // const users = await UserService.getAllUsers();
+    // return h
+    //   .response({
+    //     error: false,
+    //     message: "Profile fetched successfully",
+    //     data: users,
+    //   })
+    //   .code(200);
   }
 
   static async updateProfile(request, h) {
-    const { id } = request.params;
+    const dataUser = request.user;
     const { name, email, birthdate, gender, weight, height } = request.payload;
-    const user = await UserService.updateUser(id, name, email, birthdate, gender, weight, height);
+    console.log(dataUser);
+    console.log(name, email, birthdate, gender, weight, height);
+
+    const user = await UserService.updateUser(
+      dataUser.id,
+      name,
+      email,
+      birthdate,
+      gender,
+      weight,
+      height
+    );
+
     return h
       .response({
         error: false,
@@ -80,15 +92,44 @@ class UserController {
       .code(200);
   }
 
+  // static async deleteUser(request, h) {
+  //   const { id } = request.params;
+  //   console.log(id);
+
+  //   await UserService.deleteUser(id);
+  //   return h
+  //     .response({
+  //       error: false,
+  //       message: "User deleted successfully",
+  //     })
+  //     .code(204);
+  // }
   static async deleteUser(request, h) {
     const { id } = request.params;
-    await UserService.deleteUser(id);
-    return h
-      .response({
-        error: false,
-        message: "User deleted successfully",
-      })
-      .code(204);
+
+    try {
+      if (!id) {
+        return h.response({ error: true, message: "ID is required" }).code(400);
+      }
+
+      await UserService.deleteUser(id);
+
+      return h
+        .response({
+          error: false,
+          message: "User deleted successfully",
+        })
+        .code(200);
+    } catch (error) {
+      console.error(`Error deleting user with ID ${id}:`, error.message);
+
+      return h
+        .response({
+          error: true,
+          message: `Failed to delete user: ${error.message}`,
+        })
+        .code(500);
+    }
   }
 }
 

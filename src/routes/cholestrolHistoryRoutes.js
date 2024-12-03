@@ -4,12 +4,15 @@ const authMiddleware = require("../middleware/authMiddleware");
 const cholestrolHistoryRoutes = [
   {
     method: "POST",
-    path: "/cholestrol/{userId}",
+    path: "/cholestrol",
     handler: CholesterolHistoryController.addCholesterol,
+    options: {
+      pre: [authMiddleware],
+    },
   },
   {
     method: "GET",
-    path: "/cholestrol/{userId}",
+    path: "/cholestrol",
     handler: CholesterolHistoryController.getCholesterolHistory,
     options: {
       pre: [authMiddleware],
@@ -17,7 +20,7 @@ const cholestrolHistoryRoutes = [
   },
   {
     method: "GET",
-    path: "/cholestrol/recentHistory/{userId}",
+    path: "/cholestrol/recentHistory",
     handler: CholesterolHistoryController.getCholesterolRecentHistory,
     options: {
       pre: [authMiddleware],
