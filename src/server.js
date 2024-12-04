@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRoutes");
 const cholestrolHistoryRoutes = require("./routes/cholestrolHistoryRoutes");
 const foodRoutes = require("./routes/foodRoutes");
+const mealFoodRoutes = require("./routes/mealFoodRoute");
 
 dotenv.config();
 
@@ -17,7 +18,12 @@ const init = async () => {
     },
   });
 
-  const allRoutes = [...userRoutes, ...cholestrolHistoryRoutes, ...foodRoutes];
+  const allRoutes = [
+    ...userRoutes,
+    ...cholestrolHistoryRoutes,
+    ...foodRoutes,
+    ...mealFoodRoutes,
+  ];
 
   server.route(allRoutes);
 

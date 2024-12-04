@@ -1,89 +1,154 @@
-// const mealFoodService = require("../services/mealFoodService");
+const mealFoodService = require("../services/mealFoodService");
 
-// class mealFoodController {
-//   static async addMealFood(request, h) {
-//     const { id } = request.payload;
-//     try {
-//       const dataFood = await mealFoodService.newFood(id);
-//       return h
-//         .response({
-//           error: false,
-//           message: "Add Meal Food successfully",
-//           data: dataFood,
-//         })
-//         .code(201);
-//     } catch (error) {
-//       return h
-//         .response({
-//           error: true,
-//           message: "Add Food failed " + error.message,
-//         })
-//         .code(400);
-//     }
-//   }
+class mealFoodController {
+  static async addMealFood(request, h) {
+    const userId = request.user.id;
+    const { foodId, type, time } = request.payload;
 
-//   static async getMealFood(request, h) {
-//     try {
-//       const dataFoods = await mealFoodService.getAllFoods();
-//       return h
-//         .response({
-//           error: false,
-//           message: "Get Food successfully",
-//           data: dataFoods,
-//         })
-//         .code(200);
-//     } catch (error) {
-//       return h
-//         .response({
-//           error: true,
-//           message: "Get Food failed" + error.message,
-//         })
-//         .code(400);
-//     }
-//   }
+    // Validasi request payload
+    if (!foodId || !type || !time) {
+      return h
+        .response({
+          error: true,
+          message: "Missing required fields: foodId, type, or time",
+        })
+        .code(400); // Bad Request
+    }
 
-//   static async updateMealFood(request, h) {
-//     const { id } = request.params;
-//     const { nutritionDensity } = request.payload;
-//     const update = await mealFoodService.updateFood(id, nutritionDensity);
+    // Validasi tipe meal (type)
+    const validMealTypes = ["Breakfast", "Lunch", "Dinner", "Snack"];
+    if (!validMealTypes.includes(type)) {
+      return h
+        .response({
+          error: true,
+          message:
+            "Invalid meal type. Valid types are: Breakfast, Lunch, Dinner, Snack.",
+        })
+        .code(400); // Bad Request
+    }
 
-//     try {
-//       return h
-//         .response({
-//           error: false,
-//           message: "Update food successfully",
-//           data: update,
-//         })
-//         .code(200);
-//     } catch (error) {
-//       return h
-//         .response({
-//           error: true,
-//           message: error.message,
-//         })
-//         .code(500);
-//     }
-//   }
+    // Validasi format waktu (time)
+    const dateTime = new Date(time);
+    if (isNaN(dateTime.getTime())) {
+      return h
+        .response({
+          error: true,
+          message: "Invalid time format. Ensure it is a valid DateTime.",
+        })
+        .code(400); // Bad Request
+    }
 
-//   static async deleteHistoryMealFood(request, h) {
-//     const { id } = request.params;
-//     try {
-//       await mealFoodService.deleteFood(id);
-//       return h
-//         .response({
-//           error: false,
-//           message: "Food deleted successfully",
-//         })
-//         .code(200);
-//     } catch (error) {
-//       return h
-//         .response({
-//           error: true,
-//           message: "Food deleted failed" + error.message,
-//         })
-//         .code(500);
-//     }
-//   }
-// }
+    try {
+      const dataFood = await mealFoodService.newMealFood(
+        userId,
+        foodId,
+        type,
+        time
+      );
+      return h
+        .response({
+          error: false,
+          message: "Add Meal Food successfully",
+          data: dataFood,
+        })
+        .code(201);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Add Meal Food failed " + error.message,
+        })
+        .code(400);
+    }
+  }
 
-// module.exports = mealFoodController;
+  static async getMealFood(request, h) {
+    try {
+      const dataFoods = await mealFoodService.getAllMealFoods();
+      return h
+        .response({
+          error: false,
+          message: "Get Meal Food successfully",
+          data: dataFoods,
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Get Meal Food failed" + error.message,
+        })
+        .code(400);
+    }
+  }
+
+  static async updateMealFood(request, h) {
+    const userId = request.user.id;
+    const { id } = request.params;
+    const { foodId, type, time } = request.payload;
+
+    try {
+      if (!id || !foodId || !type || !time) {
+        return h
+          .response({
+            error: true,
+            message: "All fields (id, foodId, type, time) are required",
+          })
+          .code(400);
+      }
+      const dateTime = new Date(time);
+      if (isNaN(dateTime.getTime())) {
+        return h
+          .response({
+            error: true,
+            message: "Invalid time format. Ensure it is a valid DateTime.",
+          })
+          .code(400); // Bad Request
+      }
+      const update = await mealFoodService.updateMealFood(
+        id,
+        userId,
+        foodId,
+        type,
+        time
+      );
+
+      return h
+        .response({
+          error: false,
+          message: "Update meal food successfully",
+          data: update,
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: error.message,
+        })
+        .code(500);
+    }
+  }
+
+  static async deleteHistoryMealFood(request, h) {
+    const { id } = request.params;
+    try {
+      await mealFoodService.deleteMealFood(id);
+      return h
+        .response({
+          error: false,
+          message: "Meal food deleted successfully",
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Meal food deleted failed" + error.message,
+        })
+        .code(500);
+    }
+  }
+}
+
+module.exports = mealFoodController;
