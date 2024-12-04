@@ -63,8 +63,30 @@ class mealFoodController {
   }
 
   static async getMealFood(request, h) {
+    const userId = request.user.id;
     try {
-      const dataFoods = await mealFoodService.getAllMealFoods();
+      const dataFoods = await mealFoodService.getAllMealFoods(userId);
+      return h
+        .response({
+          error: false,
+          message: "Get Meal Food successfully",
+          data: dataFoods,
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Get Meal Food failed" + error.message,
+        })
+        .code(400);
+    }
+  }
+
+  static async getMealFoodThisDay(request, h) {
+    const userId = request.user.id;
+    try {
+      const dataFoods = await mealFoodService.getAllMealFoodsThisDay(userId);
       return h
         .response({
           error: false,

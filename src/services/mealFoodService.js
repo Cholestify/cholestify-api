@@ -22,9 +22,61 @@ class mealfoodService {
     }
   }
 
-  static async getAllMealFoods() {
-    const foods = await prisma.mealFood.findMany();
-    return foods;
+  static async getAllMealFoods(userId) {
+    const foods = await prisma.mealFood.findMany({
+      where: {
+        userId: Number(userId),
+      },
+      include: {
+        food: true,
+      },
+      orderBy: {
+        time: "desc",
+      },
+    });
+    return foods.map((meal) => ({
+      id: meal.id,
+      userId: meal.userId,
+      foodId: meal.foodId,
+      name: meal.food.food,
+      type: meal.type,
+      time: meal.time,
+      createdAt: meal.createdAt,
+      updatedAt: meal.updatedAt,
+    }));
+  }
+
+  static async getAllMealFoodsThisDay(userId) {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    const foods = await prisma.mealFood.findMany({
+      where: {
+        userId: Number(userId),
+        time: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+      include: {
+        food: true,
+      },
+      orderBy: {
+        time: "desc",
+      },
+    });
+
+    return foods.map((meal) => ({
+      id: meal.id,
+      userId: meal.userId,
+      foodId: meal.foodId,
+      name: meal.food.food,
+      type: meal.type,
+      time: meal.time,
+      createdAt: meal.createdAt,
+      updatedAt: meal.updatedAt,
+    }));
   }
 
   static async updateMealFood(id, userId, foodId, type, time) {
