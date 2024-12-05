@@ -15,9 +15,8 @@ class mealfoodService {
         },
       });
 
-      return newwMealFood; // Mengembalikan data mealFood yang baru dibuat
+      return newwMealFood;
     } catch (error) {
-      // Menangani error yang terjadi saat pembuatan mealFood
       throw new Error("Failed to create new meal: " + error.message);
     }
   }
@@ -81,7 +80,7 @@ class mealfoodService {
 
   static async updateMealFood(id, userId, foodId, type, time) {
     try {
-      return await prisma.mealFood.update({
+      const updatedMealFood = await prisma.mealFood.update({
         where: {
           id: Number(id),
         },
@@ -91,7 +90,21 @@ class mealfoodService {
           type,
           time,
         },
+        include: {
+          food: true,
+        },
       });
+
+      return {
+        id: updatedMealFood.id,
+        userId: updatedMealFood.userId,
+        foodId: updatedMealFood.foodId,
+        name: updatedMealFood.food.food,
+        type: updatedMealFood.type,
+        time: updatedMealFood.time,
+        createdAt: updatedMealFood.createdAt,
+        updatedAt: updatedMealFood.updatedAt,
+      };
     } catch (error) {
       console.error("Error in updateMealFood:", error);
       throw new Error(`Database error: ${error.message}`);

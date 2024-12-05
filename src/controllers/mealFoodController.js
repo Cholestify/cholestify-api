@@ -3,7 +3,8 @@ const mealFoodService = require("../services/mealFoodService");
 class mealFoodController {
   static async addMealFood(request, h) {
     const userId = request.user.id;
-    const { foodId, type, time } = request.payload;
+    const time = new Date();
+    const { foodId, type } = request.payload;
 
     // Validasi request payload
     if (!foodId || !type || !time) {
@@ -107,7 +108,8 @@ class mealFoodController {
   static async updateMealFood(request, h) {
     const userId = request.user.id;
     const { id } = request.params;
-    const { foodId, type, time } = request.payload;
+    const time = new Date();
+    const { foodId, type } = request.payload;
 
     try {
       if (!id || !foodId || !type || !time) {
