@@ -9,6 +9,7 @@ const authMiddleware = async (request, h) => {
   try {
     const decoded = jwtUtils.verifyToken(token);
     request.user = decoded;
+    
     return h.continue;
   } catch (error) {
     return h.response({ error: "Invalid token" }).code(403);

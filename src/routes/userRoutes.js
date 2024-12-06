@@ -21,6 +21,14 @@ const userRoutes = [
     },
   },
   {
+    method: "GET",
+    path: "/users/daily-nutrition",
+    handler: UserController.dailyNutrition,
+    options: {
+      pre: [authMiddleware],
+    },
+  },
+  {
     method: "PUT",
     path: "/users/profile",
     handler: UserController.updateProfile,
