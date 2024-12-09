@@ -19,6 +19,14 @@ const foodRoutes = [
     },
   },
   {
+    method: "GET",
+    path: "/food/recommendation",
+    handler: foodController.getFoodRecommendation,
+    options: {
+      pre: [authMiddleware],
+    },
+  },
+  {
     method: "PUT",
     path: "/food/{id}",
     handler: foodController.updateFood,

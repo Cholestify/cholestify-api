@@ -30,7 +30,7 @@ const userRoutes = [
   },
   {
     method: "PUT",
-    path: "/users/profile",
+    path: "/users/profile/{id}",
     handler: UserController.updateProfile,
     options: {
       pre: [authMiddleware],

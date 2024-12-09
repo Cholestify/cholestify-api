@@ -15,7 +15,7 @@ class foodService {
     protein,
     dietaryFiber,
     cholesterol,
-    sodium, 
+    sodium,
     water,
     vitaminA,
     vitaminB1,
@@ -76,7 +76,7 @@ class foodService {
         potassium: potassium,
         selenium: selenium,
         zinc: zinc,
-        nutritionDensity: nutritionDensity
+        nutritionDensity: nutritionDensity,
       },
     });
   }
@@ -86,42 +86,66 @@ class foodService {
     return foods;
   }
 
+  //get all food recomendations
+  static async getAllFoodsRecommendation(a, b, c) {
+    const tigaFoods = [];
+
+    const foodA = await prisma.food.findUnique({
+      where: {
+        id: a,
+      },
+    });
+    const foodB = await prisma.food.findUnique({
+      where: {
+        id: b,
+      },
+    });
+    const foodc = await prisma.food.findUnique({
+      where: {
+        id: c,
+      },
+    });
+
+    tigaFoods.push(foodA, foodB, foodc);
+    return tigaFoods;
+  }
+
   static async updateFood(
-    id, 
-    newFood, 
-    newCaloricValue, 
-    newFat, 
-    newSaturatedFats, 
-    newMonounsaturatedFats, 
-    newPolyunsaturatedFats, 
-    newCarbohydrates, 
-    newSugars, 
-    newProtein, 
-    newDietaryFiber, 
-    newCholesterol, 
-    newSodium, 
-    newWater, 
-    newVitaminA, 
-    newVitaminB1, 
-    newVitaminB11, 
-    newVitaminB12, 
-    newVitaminB2, 
-    newVitaminB3, 
-    newVitaminB5, 
-    newVitaminB6, 
-    newVitaminC, 
-    newVitaminD, 
+    id,
+    newFood,
+    newCaloricValue,
+    newFat,
+    newSaturatedFats,
+    newMonounsaturatedFats,
+    newPolyunsaturatedFats,
+    newCarbohydrates,
+    newSugars,
+    newProtein,
+    newDietaryFiber,
+    newCholesterol,
+    newSodium,
+    newWater,
+    newVitaminA,
+    newVitaminB1,
+    newVitaminB11,
+    newVitaminB12,
+    newVitaminB2,
+    newVitaminB3,
+    newVitaminB5,
+    newVitaminB6,
+    newVitaminC,
+    newVitaminD,
     newVitaminE,
-    newVitaminK, 
-    newCalcium, 
-    newCopper, 
-    newIron, 
-    newMagnesium, 
-    newManganese, 
-    newPhosphorus, 
-    newPotassium, 
-    newSelenium, 
-    newZinc, 
+    newVitaminK,
+    newCalcium,
+    newCopper,
+    newIron,
+    newMagnesium,
+    newManganese,
+    newPhosphorus,
+    newPotassium,
+    newSelenium,
+    newZinc,
     newNutritionDensity
   ) {
     return await prisma.food.update({

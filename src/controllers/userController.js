@@ -63,7 +63,7 @@ class UserController {
   static async dailyNutrition(request, h) {
     const idUser = request.user.id;
     const user = await UserService.findUserById(idUser);
-    if(!user){
+    if (!user) {
       return h
         .response({
           error: true,
@@ -71,39 +71,45 @@ class UserController {
         })
         .code(404);
     }
-    if(!user.birth&&!user.gender&&!user.weight&&!user.height&&!user.activityLevel){
+    if (
+      !user.birth &&
+      !user.gender &&
+      !user.weight &&
+      !user.height &&
+      !user.activityLevel
+    ) {
       return h
-      .response({
-        error: true,
-        message: "User data is not complete",
-      })
-      .code(400);
+        .response({
+          error: true,
+          message: "User data is not complete",
+        })
+        .code(400);
     }
     var age = new Date().getFullYear() - new Date(user.birthdate).getFullYear();
     var bmr = 0;
-    if (user.gender == 'male'){
+    if (user.gender == "male") {
       bmr = user.weight * 10 + user.height * 6.25 - age * 5 + 5;
-    }else{
+    } else {
       bmr = user.weight * 10 + user.height * 6.25 - age * 5 - 161;
     }
     var totalCalories = bmr;
-    if(user.activity == 'sedentary'){
+    if (user.activity == "sedentary") {
       totalCalories *= 1.2;
-    }else if(user.activity == 'light'){
+    } else if (user.activity == "light") {
       totalCalories *= 1.375;
-    }else if(user.activity == 'moderate'){
+    } else if (user.activity == "moderate") {
       totalCalories *= 1.55;
-    }else if(user.activity == 'active'){
+    } else if (user.activity == "active") {
       totalCalories *= 1.725;
-    }else if(user.activity == 'very_active'){
+    } else if (user.activity == "very_active") {
       totalCalories *= 1.9;
-    }else{
+    } else {
       return h
-      .response({
-        error: true,
-        message: "Activity Level not found",
-      })
-      .code(404);
+        .response({
+          error: true,
+          message: "Activity Level not found",
+        })
+        .code(404);
     }
     var dataResponse = {
       error: false,
@@ -114,17 +120,25 @@ class UserController {
         totalFat: totalCalories * 0.25,
         totalCarbohydrate: totalCalories * 0.6,
       },
-    }
-    return h
-      .response(dataResponse)
-      .code(200);
+    };
+    return h.response(dataResponse).code(200);
   }
 
-
   static async updateProfile(request, h) {
-    const { id } = request.params;
-    const { name, email, birthdate, gender, weight, height } = request.payload;
-    const user = await UserService.updateUser(id, name, email, birthdate, gender, weight, height);
+    const idUser = request.params.id;
+
+    const { name, email, birthdate, gender, weight, height, activity } =
+      request.payload;
+    const user = await UserService.updateUser(
+      idUser,
+      name,
+      email,
+      birthdate,
+      gender,
+      weight,
+      height,
+      activity
+    );
     return h
       .response({
         error: false,
