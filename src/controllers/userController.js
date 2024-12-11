@@ -1,4 +1,5 @@
 const UserService = require("../services/userService");
+const mealFoodService = require("../services/mealFoodService");
 const jwtUtils = require("../utils/jwtUtils");
 const bcrypt = require("bcryptjs");
 
@@ -111,6 +112,14 @@ class UserController {
         })
         .code(404);
     }
+    const dataFoods = await mealFoodService.getAllMealFoodsThisDay(idUser);
+    
+    dataFoods.forEach((food) => {
+      totalCalories -= food.calories;
+      totalProtein -= food.protein;
+      totalFat -= food.fat;
+      totalCarbohydrate -= food.carbohydrate;
+    });
     var dataResponse = {
       error: false,
       message: "Daily Nutrition fetched successfully",
@@ -125,7 +134,7 @@ class UserController {
   }
 
   static async updateProfile(request, h) {
-    const idUser = request.params.id;
+    const idUser = request.user.id;
 
     const { name, email, birthdate, gender, weight, height, activity } =
       request.payload;
