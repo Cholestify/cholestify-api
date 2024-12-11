@@ -105,6 +105,27 @@ class mealFoodController {
     }
   }
 
+  static async getMealFoodNutritionToday(request, h) {
+    const userId = request.user.id;
+    try {
+      const dataFoods = await mealFoodService.getAllMealFoodsNutritionThisDay(userId);
+      return h
+        .response({
+          error: false,
+          message: "Get Meal Food Nutrition successfully",
+          data: dataFoods,
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: "Get Meal Food Nutrition failed" + error.message,
+        })
+        .code(400);
+    }
+  }
+
   static async updateMealFood(request, h) {
     const userId = request.user.id;
     const { id } = request.params;

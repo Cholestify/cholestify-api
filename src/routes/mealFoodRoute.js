@@ -27,6 +27,14 @@ const mealFoodRoutes = [
     },
   },
   {
+    method: "GET",
+    path: "/mealFood/recentNutritionHistory",
+    handler: mealFoodController.getMealFoodNutritionToday,
+    options: {
+      pre: [authMiddleware],
+    },
+  },
+  {
     method: "PUT",
     path: "/mealFood/{id}",
     handler: mealFoodController.updateMealFood,

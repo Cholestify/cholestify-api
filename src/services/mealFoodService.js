@@ -78,6 +78,46 @@ class mealfoodService {
     }));
   }
 
+  static async getAllMealFoodsNutritionThisDay(userId) {
+    const today = new Date();
+    const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+    const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+    const foods = await prisma.mealFood.findMany({
+      where: {
+        userId: Number(userId),
+        time: {
+          gte: startOfDay,
+          lte: endOfDay,
+        },
+      },
+      include: {
+        food: true,
+      },
+      orderBy: {
+        time: "desc",
+      },
+    });
+
+    const totalNutrition = foods.reduce(
+      (acc, meal) => {
+        acc.calories += meal.food.calories ? meal.food.calories : 0;
+        acc.protein += meal.food.protein ? meal.food.protein : 0;
+        acc.fat += meal.food.fat ? meal.food.fat : 0;
+        acc.carbohydrate += meal.food.carbohydrate ? meal.food.carbohydrate : 0;
+        return acc;
+      },
+      {
+        calories: 0,
+        protein: 0,
+        fat: 0,
+        carbohydrate: 0,
+      }
+    );
+
+    return totalNutrition;
+  }
+
   static async updateMealFood(id, userId, foodId, type, time) {
     try {
       const updatedMealFood = await prisma.mealFood.update({
