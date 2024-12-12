@@ -94,6 +94,9 @@ class UserController {
       bmr = user.weight * 10 + user.height * 6.25 - age * 5 - 161;
     }
     var totalCalories = bmr;
+    var totalProtein;
+    var totalFat;
+    var totalCarbohydrate;
     if (user.activity == "sedentary") {
       totalCalories *= 1.2;
     } else if (user.activity == "light") {
@@ -112,14 +115,18 @@ class UserController {
         })
         .code(404);
     }
-    const dataFoods = await mealFoodService.getAllMealFoodsThisDay(idUser);
     
-    dataFoods.forEach((food) => {
-      totalCalories -= food.calories ?? 0;
-      totalProtein -= food.protein ?? 0;
-      totalFat -= food.fat ?? 0;
-      totalCarbohydrate -= food.carbohydrate ?? 0;
-    });
+    
+    const dataFoods = await mealFoodService.getAllMealFoodsThisDay(idUser);
+    if(dataFoods.length > 0){
+      dataFoods.forEach((food) => {
+        totalCalories -= food.calories ?? 0;
+        totalProtein -= food.protein ?? 0;
+        totalFat -= food.fat ?? 0;
+        totalCarbohydrate -= food.carbohydrate ?? 0;
+      });
+    }
+    
     var dataResponse = {
       error: false,
       message: "Daily Nutrition fetched successfully",
