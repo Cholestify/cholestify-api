@@ -35,8 +35,4 @@ After starting the server, you can interact with the API via HTTP requests. Belo
 - **Register a new user:**
 curl -X POST http://localhost:3000/users/register -H "Content-Type: application/json" -d '{"username": "newuser", "password": "newpassword"}'
 
-- **Fetch user health records:**
-curl http://localhost:3000/health_records/{user_id}
-
-
 Thank you for exploring the Cholestify API. Together, let's make health management accessible and efficient!
