@@ -115,10 +115,10 @@ class UserController {
     const dataFoods = await mealFoodService.getAllMealFoodsThisDay(idUser);
     
     dataFoods.forEach((food) => {
-      totalCalories -= food.calories;
-      totalProtein -= food.protein;
-      totalFat -= food.fat;
-      totalCarbohydrate -= food.carbohydrate;
+      totalCalories -= food.calories ?? 0;
+      totalProtein -= food.protein ?? 0;
+      totalFat -= food.fat ?? 0;
+      totalCarbohydrate -= food.carbohydrate ?? 0;
     });
     var dataResponse = {
       error: false,
