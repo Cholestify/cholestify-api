@@ -2,12 +2,24 @@ const UserService = require("../services/userService");
 const mealFoodService = require("../services/mealFoodService");
 const jwtUtils = require("../utils/jwtUtils");
 const bcrypt = require("bcryptjs");
+const Joi = require('joi');
 
 class UserController {
   static async register(request, h) {
-    const { name, email, password } = request.payload;
+    // Validation schema
+    const schema = Joi.object({
+      name: Joi.string().required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().min(6).required()
+    });
+
+    const { error, value } = schema.validate(request.payload);
+    if (error) {
+      return h.response({ error: true, message: error.details[0].message }).code(400);
+    }
+
     try {
-      const user = await UserService.createUser(name, email, password);
+      const user = await UserService.createUser(value.name, value.email, value.password);
       return h
         .response({
           error: false,
@@ -26,9 +38,19 @@ class UserController {
   }
 
   static async login(request, h) {
-    const { email, password } = request.payload;
-    const user = await UserService.findUserByEmail(email);
-    if (user && (await bcrypt.compare(password, user.password))) {
+    // Validation schema
+    const schema = Joi.object({
+      email: Joi.string().email().required(),
+      password: Joi.string().required()
+    });
+
+    const { error, value } = schema.validate(request.payload);
+    if (error) {
+      return h.response({ error: true, message: error.details[0].message }).code(400);
+    }
+
+    const user = await UserService.findUserByEmail(value.email);
+    if (user && (await bcrypt.compare(value.password, user.password))) {
       const token = jwtUtils.generateToken(user.id, user.email);
       return h
         .response({
@@ -141,27 +163,48 @@ class UserController {
   }
 
   static async updateProfile(request, h) {
-    const idUser = request.user.id;
+    // Validation schema
+    const schema = Joi.object({
+      name: Joi.string().optional(),
+      email: Joi.string().email().optional(),
+      birthdate: Joi.date().optional(),
+      gender: Joi.string().valid('male', 'female').optional(),
+      weight: Joi.number().positive().optional(),
+      height: Joi.number().positive().optional(),
+      activity: Joi.string().optional()
+    });
 
-    const { name, email, birthdate, gender, weight, height, activity } =
-      request.payload;
-    const user = await UserService.updateUser(
-      idUser,
-      name,
-      email,
-      birthdate,
-      gender,
-      weight,
-      height,
-      activity
-    );
-    return h
-      .response({
-        error: false,
-        message: "Profile updated successfully",
-        data: user,
-      })
-      .code(200);
+    const { error, value } = schema.validate(request.payload);
+    if (error) {
+      return h.response({ error: true, message: error.details[0].message }).code(400);
+    }
+
+    try {
+      const user = await UserService.updateUser(
+        request.user.id,
+        value.name,
+        value.email,
+        value.birthdate,
+        value.gender,
+        value.weight,
+        value.height,
+        value.activity
+      );
+      return h
+        .response({
+          error: false,
+          message: "Profile updated successfully",
+          data: user,
+        })
+        .code(200);
+    } catch (error) {
+      return h
+        .response({
+          error: true,
+          message: `Failed to update profile: ${error.message}`,
+        })
+        .code(500);
+    }
   }
 
   static async deleteUser(request, h) {
