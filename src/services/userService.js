@@ -28,6 +28,11 @@ class UserService {
   }
 
   static async updateUser (id, name, email, birthdate, gender, weight, height, activity) {
+    const birthdateDate = new Date(birthdate);
+  
+    if (isNaN(birthdateDate)) {
+      throw new Error("Invalid birthdate format");
+    }
     return await prisma.user.update({
       where: { id: Number(id) },
       data: { 
